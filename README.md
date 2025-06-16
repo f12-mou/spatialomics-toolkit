@@ -56,6 +56,112 @@ Dataset retrieved from: [10x Genomics Dataset Portal](https://www.10xgenomics.co
 
 ---
 
+## What the Notebook Does (Pipeline Overview)
+
+Each notebook guides you through a reproducible pipeline for spatial transcriptomics analysis. Below is a breakdown of each step, with **inputs and outputs** clearly defined.
+
+---
+
+### ✅ Step 1: Environment Setup
+
+**Purpose:** Install all required packages and ensure compatibility with Colab (especially for `dask`, `spatialdata`, and I/O issues).
+
+- **Input:** None  
+- **Output:** Clean Python environment with all necessary libraries installed
+
+---
+
+### ✅ Step 2: Data Download & Extraction
+
+**Purpose:** Automatically download the dataset archive (`.zip`) from a specified URL and extract its contents.
+
+- **Input:**  
+  - `DATA_URL` (e.g., MERFISH dataset from EMBL)
+
+- **Output:**  
+  - Extracted dataset folder (e.g., `.zarr`, `.h5ad`, `.tif`, or related metadata)  
+  - Paths like `/content/merfish_unzipped/` become available
+
+*You can change the input URL to work with other similar spatial omics datasets*
+
+---
+
+### ✅ Step 3: Load SpatialData Object
+
+**Purpose:** Load the dataset using `spatialdata.read_zarr()` or `read_image()` into a `SpatialData` object.
+
+- **Input:**  
+  - Path to extracted dataset (e.g., `.zarr` folder or `.h5ad` file)
+
+- **Output:**  
+  - A `SpatialData` object `sdata` with internal components:
+    - `.images`
+    - `.labels`
+    - `.table`
+    - `.shapes`
+
+*The object allows flexible access to spatial coordinates and gene expression*
+
+---
+
+### ✅ Step 4: Gene List Export
+
+**Purpose:** Extract all gene names from the `AnnData` object inside `sdata.table` and save them as a CSV file.
+
+- **Input:**  
+  - `sdata.table` (accessed automatically from the loaded spatial object)
+
+- **Output:**  
+  - 📄 `all_genes.csv` — list of all detected genes
+
+---
+
+### ✅ Step 5: Spatial Coordinates Plot
+
+**Purpose:** Plot the x–y coordinates of all cells/spots for a general spatial layout.
+
+- **Input:**  
+  - `sdata.table` — columns for `x`, `y` coordinates
+
+- **Output:**  
+  - 📊 `scatter_plot.png` — a spatial scatter plot of the sample
+
+*Size and transparency are adjustable via parameters like `SCATTER_POINT_SIZE` and `SCATTER_ALPHA`*
+
+---
+
+### ✅ Step 6: Gene Expression Visualization
+
+**Purpose:** Visualize the expression of a **single gene** as a heatmap in spatial coordinates.
+
+- **Input:**  
+  - Gene name string (e.g., `"Asic4"` via `EXAMPLE_GENE`)
+
+- **Output:**  
+  - 📊 Heatmap image saved as  
+    `gene_plots/Asic4_heatmap.png`
+
+*This step demonstrates how to query and plot any gene of interest in the spatial context*
+
+---
+
+### ✅ Step 7: Joint Expression Analysis
+
+**Purpose:** For a user-defined list of genes, compute a **joint expression score** per cell/spot and visualize it as a heatmap.
+
+- **Input:**  
+  - CSV file of candidate genes  
+    📄 `candidate_genes.csv`
+
+- **Output:**  
+  - 📄 `joint_expression_scores.csv` — average expression score per spot  
+  - 📊 `joint_expression_heatmap.png` — spatial heatmap of joint expression
+
+*Useful for summarizing multiple marker genes or signature scores across the tissue*
+
+---
+
+
 
 ## 🔧 Parameter Configuration (Highly Customizable)
 
