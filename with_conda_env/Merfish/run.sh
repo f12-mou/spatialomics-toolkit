@@ -1,0 +1,1 @@
+jupyter nbconvert --to notebook --execute spatial_MERFISH.ipynb --output output_MERFISH.ipynb
